@@ -1,0 +1,40 @@
+@hostname = http://localhost:9999/authe
+
+post {{hostname}}/registerUser
+Content-Type: application/json
+
+{
+    "user" : {
+        "firstName": "Dixit",
+        "lastName": "Dodiya",
+        "mobile": "9999222244",
+        "email": "homion.app@gmail.com"
+    }
+}
+###
+
+post {{hostname}}/verifyOTP
+Content-Type: application/json
+
+{
+    "email": "homion.app@gmail.com",
+    "otp": "966373"
+}
+###
+
+post {{hostname}}/user/login
+Content-Type: application/json
+
+{
+    "email" : "homion.app@gmail.com"
+}
+###
+
+post {{hostname}}/admin/login
+Content-Type: application/json
+
+{
+    "userName" : "admin",
+    "password" : "admin"
+}
+###

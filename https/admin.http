@@ -1,0 +1,193 @@
+@hostname = https://tiffylearn2-zany-space-parakeet-wr7v6v5gg99qf5w5r-9999.preview.app.github.dev/admin
+@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImFkbWluIiwidHlwZSI6IkFETUlOIiwiaWF0IjoxNjg5Mzk5NTkzLCJleHAiOjE3MDQ5NTE1OTN9.2VhIoQlgEFgUFc1CZ56K8d-pAsuPobar5AFWy2tWE8w
+
+post {{hostname}}/add/area
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "area" : {
+        "name": "Bopal",
+        "pincode": "382120",
+        "status": "PENDING"
+    }
+}
+###
+
+put {{hostname}}/edit/area
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "area" : {
+        "areaId": "64b2915e574b17934774f361",
+        "name": "Sanand",
+        "pincode": "382110",
+        "status": "ACTIVE"
+    }
+}
+###
+
+put {{hostname}}/change/status/area
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "areaId": "64b186b6e2fda9ea2726e3ee",
+    "status": "ACTIVE" 
+}
+###
+
+post {{hostname}}/add/subArea
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "subArea" : {
+        "name": "Infocity",
+        "area": "64b2919f574b17934774f364",
+        "status": "PENDING"
+    }
+}
+###
+
+put {{hostname}}/edit/subArea
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "subArea" : {
+        "subAreaId": "64b189a1c3733f1bde122e0e",
+        "name": "EKLINGJI_ROAD",
+        "area": "64b186b6e2fda9ea2726e3ee",
+        "status": "ACTIVE"
+    }
+}
+###
+
+put {{hostname}}/change/status/subArea
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "subAreaId": "64b189a1c3733f1bde122e0e",
+    "status": "INACTIVE" 
+}
+###
+
+post {{hostname}}/add/item
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "item" : {
+        "name": "Chana Masala",
+        "price": "25",
+        "type": "SABJI",
+        "unit": "200gm",
+        "status": "ACTIVE"
+    }
+}
+###
+
+put {{hostname}}/edit/item
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "item" : {
+        "itemId": "64b25154b10531d39c5b7a1f",
+        "name": "Mag Masala",
+        "price": "25",
+        "type": "SABJI",
+        "unit": "200gm",
+        "status": "ACTIVE"
+    }
+}
+###
+
+put {{hostname}}/change/status/item
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "itemId": "64b25154b10531d39c5b7a1f",
+    "status": "INACTIVE" 
+}
+###
+
+post {{hostname}}/add/menu
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "menu" : {
+        "name": "Monday Lunch",
+        "meal": "LUNCH",
+        "items": ["64b25154b10531d39c5b7a1f"]
+    }
+}
+###
+
+put {{hostname}}/edit/menu
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "menu" : {
+        "menuId": "64b2561e37330f71b5454654",
+        "name": "Monday Lunch",
+        "meal": "LUNCH",
+        "items": ["64b25154b10531d39c5b7a1f","64b2565f37330f71b5454656"]
+    }
+}
+###
+
+get {{hostname}}/get/area
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/get/subArea?areaId=64b186b6e2fda9ea2726e3ee
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/get/user
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/get/item
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/get/menu
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/get/menu?menuId=64b2561e37330f71b5454654
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/get/menuDay
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+put {{hostname}}/set/menu
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "menuDay" : {
+        "_id": "64b25e88a6b8595a81d8aee6",
+        "day": "TOMO_DINNER",
+        "menu": "64b2561e37330f71b5454654",
+        "isSet": "false"
+    }
+}
+###

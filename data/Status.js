@@ -1,0 +1,14 @@
+const Status = Object.freeze({
+  INCART: "INCART",
+  PENDING: "PENDING",
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+  ORDERED: "ORDERED",
+  REJECTED: "REJECTED",
+  CANCELLED: "CANCELLED",
+  DELIVERED: "DELIVERED",
+  DELETED: "DELETED",
+  REGISTERED: "REGISTERED"
+});
+
+module.exports = Status;

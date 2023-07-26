@@ -1,0 +1,86 @@
+@hostname = https://tiffylearn2-zany-space-parakeet-wr7v6v5gg99qf5w5r-9999.preview.app.github.dev/user
+@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YmJhY2I3ZDQ3YmJlMGJhNjgwZGM5NCIsIm1vYmlsZSI6Ijk5OTk5OTk5OTkiLCJ0eXBlIjoiVVNFUiIsImlhdCI6MTY5MDAyMTQwOSwiZXhwIjoxNzIxNTU3NDA5fQ.mTBx_vOjFDD-P6bBdYS8CjTwl9J1lvzDB8Q9CHvCCIo
+
+get {{hostname}}/getUser
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/getMenuDay?menuDay=ALL
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/getArea
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/getSubArea?areaId=64b2919f574b17934774f364
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+post {{hostname}}/saveAddress
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "address" : {
+        "homeNo": "B-505",
+        "society": "Sidhharth Elegance",
+        "landmark": "Nr Sargasan Circle",
+        "type": "HOME",
+        "area": "64b2919f574b17934774f364",
+        "subArea": "64b292ef574b17934774f373",
+        "status": "ACTIVE"
+    }
+}
+###
+
+put {{hostname}}/editAddress
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "address" : {
+        "addressId": "64b296a4db554a816d5b7abd",
+        "homeNo": "37",
+        "society": "Radhe Vihar Society",
+        "landmark": "Nr Jalaram Mandir",
+        "type": "HOME",
+        "area": "64b2915e574b17934774f361",
+        "subArea": "64b292b5574b17934774f36d",
+        "status": "ACTIVE"
+    }
+}
+###
+
+delete {{hostname}}/deleteAddress/64b192009e769b1f589d61cf
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/getAddress
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+get {{hostname}}/getAddress/64bbae675f9f981310920f50
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
+
+post {{hostname}}/checkout
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "order" : "U2FsdGVkX18c1cvPfm+0wbyJNZiQOzziPWBT82QMyYwZWte8dA86DOoJg48VZiHIV4pqM/vLtMN3hCA8ZqYPq+aobk9BXPlIeFdV9H0oWqOpCs0lvxP1OzkgsuPI7mHI1s1XvPYRQeIoC+Fv/GdcBER/EjwI4T2TaA1DjyFBWTCCORC2or78Z9sHQ6JAW5k3kKsWzScZd6SQlEViogueohKYSx20cyD3oTKQl7CVeEzYyyuJl3Jnu1I7CNyqMMMRzI6nzSaI7+nvm7curmZOCn8Z2bEu19+ya0kA+xVFYqE56D4d/VeLs87upVQtehjFFogEBrBvSogGNkSEXEF5xPVOGb7y6uwrDHFRvfMINLtPDpjyGtjuF2tRnLA7PG5h"
+}
+###
+
+get {{hostname}}/getOrders
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+###
