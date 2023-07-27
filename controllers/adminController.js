@@ -10,6 +10,7 @@ const ApiType = Object.freeze({
   ITEM: "item",
   MENU: "menu",
   MENUDAY: "menuDay",
+  ORDER: "order",
 });
 
 exports.save = async (req, res, next) => {
@@ -48,6 +49,9 @@ exports.get = async (req, res, next) => {
       break;
     case ApiType.MENUDAY:
       await adminService.getMenuDay(req, res, next);
+      break;
+    case ApiType.ORDER:
+      await adminService.getOrder(req, res, next);
       break;
   }
 };

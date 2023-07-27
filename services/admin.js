@@ -4,6 +4,7 @@ const Area = require("../models/Area");
 const SubArea = require("../models/SubArea");
 const Item = require("../models/Item");
 const Menu = require("../models/Menu");
+const Order = require("../models/Order");
 const MenuDay = require("../models/MenuDay");
 const Response = require("../models/Response");
 
@@ -135,6 +136,47 @@ exports.getMenuDay = async (req, res, next) => {
     res.json(
       new Response(200, "", menuByDay)
     );
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.getOrder = async (req, res, next) => {
+  try {
+    const orderId = req.query.orderId;
+    const date = req.query.date;
+    let order;
+    if (orderId) {
+
+    } else if (date) {
+      order = await Order.find({ status: Status.INCART }).populate([
+        {
+          path: "user",
+          select: { firstName: 1, lastName: 1, mobile: 1 }
+        },
+        {
+          path: "address",
+          populate: [
+            {
+              path: "area",
+              select: { name: 1, pincode: 1 }
+            },
+            {
+              path: "subArea",
+              select: { name: 1 }
+            },
+          ]
+        },
+        {
+          path: "items",
+          select: { name: 1 }
+        },
+        {
+          path: "feedback"
+        }
+      ]);
+    }
+    res.json(new Response(200, "", order));
   } catch (err) {
     return next(err);
   }

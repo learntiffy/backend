@@ -1,4 +1,4 @@
-@hostname = https://tiffylearn2-zany-space-parakeet-wr7v6v5gg99qf5w5r-9999.preview.app.github.dev/admin
+@hostname = https://useradmin-alt-turbo-cod-69gr55jp5q552575x-9999.preview.app.github.dev/admin
 @jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImFkbWluIiwidHlwZSI6IkFETUlOIiwiaWF0IjoxNjg5Mzk5NTkzLCJleHAiOjE3MDQ5NTE1OTN9.2VhIoQlgEFgUFc1CZ56K8d-pAsuPobar5AFWy2tWE8w
 
 post {{hostname}}/add/area
@@ -190,4 +190,10 @@ Content-Type: application/json
         "isSet": "false"
     }
 }
+###
+
+
+get {{hostname}}/get/order?date=date
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
 ###
