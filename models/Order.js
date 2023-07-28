@@ -33,12 +33,12 @@ const orderSchema = new Schema(
       type: String,
       required: false,
     },
-    transactionId: {
+    txnId: {
       type: String,
       required: false,
     },
     status: {
-      type: String, //CANCELLED-DELIVERED-PREPARED-ONGOING/REJECTED-ORDERED-INCART
+      type: String, //INCART-ORDERED-DELIVERED
       default: Status.INCART,
     },
     meal: {
