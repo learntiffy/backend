@@ -164,8 +164,9 @@ exports.checkout = async (req, res, next) => {
 exports.feedback = async (req, res, next) => {
   try {
     let feedback = req.body.feedback;
+    const orderId = feedback.orderId;
     feedback = await new Feedback(feedback).save();
-    const order = await Order.findByIdAndUpdate(feedback.orderId, { feedback: feedback });
+    const order = await Order.findByIdAndUpdate(orderId, { feedback: feedback });
     res.json(new Response(200, "", order));
   } catch (err) {
     return next(err);

@@ -85,14 +85,14 @@ Authorization: Bearer {{jwt}}
 Content-Type: application/json
 ###
 
-put {{hostname}}/feedback
+post {{hostname}}/feedback
 Authorization: Bearer {{jwt}}
 Content-Type: application/json
 
 {
     "feedback" : {
-        "orderId": "64b296a4db554a816d5b7abd",
+        "orderId": "64bcc090d6df61465664c596",
         "comment": "Food was very good",
-        "foodRating": "4",
+        "foodRating": "4"
     }
 }
