@@ -25,6 +25,10 @@ const orderSchema = new Schema(
         ref: "Item",
       },
     ],
+    comment: {
+      type: String,
+      required: false,
+    },
     amount: {
       type: Number,
       required: true,
