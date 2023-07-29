@@ -144,12 +144,13 @@ exports.getMenuDay = async (req, res, next) => {
 exports.getOrder = async (req, res, next) => {
   try {
     const orderId = req.query.orderId;
-    const date = req.query.date;
+    const date = new Date(req.query.date);
     let order;
     if (orderId) {
 
     } else if (date) {
-      order = await Order.find({ status: Status.ORDERED }).populate([
+      const year = date.getFullYear(), month = date.getMonth(), day = date.getDate();
+      order = await Order.find({ mealDate: { $gte: new Date(year, month, day), $lt: new Date(year, month, day + 1) } }).populate([
         {
           path: "user",
           select: { firstName: 1, lastName: 1, mobile: 1 }
