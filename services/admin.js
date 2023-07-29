@@ -149,7 +149,7 @@ exports.getOrder = async (req, res, next) => {
     if (orderId) {
 
     } else if (date) {
-      order = await Order.find({ status: Status.INCART }).populate([
+      order = await Order.find({ status: Status.ORDERED }).populate([
         {
           path: "user",
           select: { firstName: 1, lastName: 1, mobile: 1 }
