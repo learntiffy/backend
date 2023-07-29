@@ -31,4 +31,6 @@ router.post("/checkout", isUser, userController.checkout);
 
 router.get("/getOrders", isUser, userController.getOrders);
 
+router.post("/feedback", isUser, userController.feedback);
+
 module.exports = router;

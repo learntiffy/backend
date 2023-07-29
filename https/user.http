@@ -1,4 +1,4 @@
-@hostname = https://tiffylearn2-zany-space-parakeet-wr7v6v5gg99qf5w5r-9999.preview.app.github.dev/user
+@hostname = https://useradmin-alt-turbo-cod-69gr55jp5q552575x-9999.preview.app.github.dev/user
 @jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YmJhY2I3ZDQ3YmJlMGJhNjgwZGM5NCIsIm1vYmlsZSI6Ijk5OTk5OTk5OTkiLCJ0eXBlIjoiVVNFUiIsImlhdCI6MTY5MDAyMTQwOSwiZXhwIjoxNzIxNTU3NDA5fQ.mTBx_vOjFDD-P6bBdYS8CjTwl9J1lvzDB8Q9CHvCCIo
 
 get {{hostname}}/getUser
@@ -84,3 +84,15 @@ get {{hostname}}/getOrders
 Authorization: Bearer {{jwt}}
 Content-Type: application/json
 ###
+
+put {{hostname}}/feedback
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "feedback" : {
+        "orderId": "64b296a4db554a816d5b7abd",
+        "comment": "Food was very good",
+        "foodRating": "4",
+    }
+}

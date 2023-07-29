@@ -7,6 +7,7 @@ const Order = require("../models/Order");
 const Area = require("../models/Area");
 const SubArea = require("../models/SubArea");
 const Address = require("../models/Address");
+const Feedback = require("../models/Feedback");
 const Response = require("../models/Response");
 const crypto = require("../utils/crypto");
 
@@ -159,6 +160,17 @@ exports.checkout = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.feedback = async (req, res, next) => {
+  try {
+    let feedback = req.body.feedback;
+    feedback = await new Feedback(feedback).save();
+    const order = await Order.findByIdAndUpdate(feedback.orderId, { feedback: feedback });
+    res.json(new Response(200, "", order));
+  } catch (err) {
+    return next(err);
+  }
+}
 
 exports.getOrders = async (req, res, next) => {
   try {
