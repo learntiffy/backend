@@ -6,6 +6,7 @@ const multer = require("multer");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
 
+const spinup = require("./utils/spinup");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const adminRoute = require("./routes/admin");
@@ -32,6 +33,7 @@ app.use((err, req, res, next) => {
   res.status(500).json("Internal Server Error");
 });
 
+spinup.start();
 mongoose
   .connect("mongodb+srv://tiffy:tiffy@cluster0.7oso9te.mongodb.net/tiffy")
   .then((result) => {
