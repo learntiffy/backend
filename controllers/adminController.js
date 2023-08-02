@@ -1,7 +1,9 @@
+const Order = require("../models/Order");
 const MenuDay = require("../models/MenuDay");
 const Response = require("../models/Response");
 
 const adminService = require("../services/admin");
+const Status = require("../data/Status");
 
 const ApiType = Object.freeze({
   USER: "user",
@@ -60,4 +62,13 @@ exports.setMenu = async (req, res, next) => {
   const menuDay = req.body.menuDay;
   await MenuDay.findByIdAndUpdate(menuDay._id, menuDay);
   res.json(new Response(201, "MenuDay updated!!"));
+};
+
+exports.changeOrderStatus = async (req, res, next) => {
+  const order = req.body.order;
+  if (Status[order.status]) {
+    await Order.findByIdAndUpdate(order._id, { status: order.status });
+    res.json(new Response(201, "Order status changed!!"));
+  } else
+    res.json(new Response(401, "Invalid order status!!"));
 };

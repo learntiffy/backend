@@ -11,4 +11,6 @@ router.get("/get/:type", isAdmin, adminController.get);
 
 router.put("/set/menu", isAdmin, adminController.setMenu);
 
+router.put("/change/order/status", isAdmin, adminController.changeOrderStatus);
+
 module.exports = router;

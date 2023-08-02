@@ -37,6 +37,10 @@ exports.getMenuDay = async (req, res, next) => {
             path: "menu",
             populate: { path: "items" },
           });
+
+      dayMenu.forEach(x => {
+        x.menu.items = x.menu.items.filter(x => x.status === Status.ACTIVE)
+      });
       res.json(new Response(200, "", dayMenu));
     } else {
       throw Error("");
@@ -117,7 +121,11 @@ exports.getAddress = async (req, res, next) => {
         },
       },
     });
-    const address = user.address.filter((x) => x.status === Status.ACTIVE);
+    const address = user.address.filter(
+      (x) => x.status === Status.ACTIVE
+        && x.subArea.status === Status.ACTIVE
+        && x.subArea.area.status === Status.ACTIVE
+    );
     res.json(new Response(200, "", address));
   } catch (err) {
     return next(err);

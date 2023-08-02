@@ -192,6 +192,18 @@ Content-Type: application/json
 }
 ###
 
+put {{hostname}}/change/order/status
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "order" : {
+        "_id": "64c7a66657a8ddea9a8064ab",
+        "status": "DELIVERED"
+    }
+}
+###
+
 
 get {{hostname}}/get/order?date=date
 Authorization: Bearer {{jwt}}
