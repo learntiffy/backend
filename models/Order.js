@@ -43,7 +43,7 @@ const orderSchema = new Schema(
     },
     status: {
       type: String, //INCART-ORDERED-DELIVERED
-      default: Status.INCART,
+      default: Status.ORDERED,
     },
     meal: {
       type: String,
