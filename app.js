@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
 
 const spinup = require("./utils/spinup");
+const setmenu = require("./utils/setmenu");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const adminRoute = require("./routes/admin");
@@ -34,6 +35,7 @@ app.use((err, req, res, next) => {
 });
 
 spinup.start();
+setmenu.start();
 mongoose
   .connect("mongodb+srv://tiffy:tiffy@cluster0.7oso9te.mongodb.net/tiffy")
   .then((result) => {

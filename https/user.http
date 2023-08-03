@@ -1,4 +1,4 @@
-@hostname = https://useradmin-alt-turbo-cod-69gr55jp5q552575x-9999.preview.app.github.dev/user
+@hostname = https://useradmin-alt-turbo-cod-69gr55jp5q552575x-9999.app.github.dev/user
 @jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YmJhY2I3ZDQ3YmJlMGJhNjgwZGM5NCIsIm1vYmlsZSI6Ijk5OTk5OTk5OTkiLCJ0eXBlIjoiVVNFUiIsImlhdCI6MTY5MDAyMTQwOSwiZXhwIjoxNzIxNTU3NDA5fQ.mTBx_vOjFDD-P6bBdYS8CjTwl9J1lvzDB8Q9CHvCCIo
 
 get {{hostname}}/getUser
