@@ -60,7 +60,6 @@ exports.get = async (req, res, next) => {
 
 exports.setMenu = async (req, res, next) => {
   const menuDay = req.body.menuDay;
-  menuDay.isSet = true;
   await MenuDay.findByIdAndUpdate(menuDay._id, menuDay);
   res.json(new Response(201, "MenuDay updated!!"));
 };
