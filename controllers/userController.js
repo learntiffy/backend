@@ -123,9 +123,10 @@ exports.getAddress = async (req, res, next) => {
     });
     const address = user.address.filter(
       (x) => x.status === Status.ACTIVE
-        && x.subArea.status === Status.ACTIVE
-        && x.subArea.area.status === Status.ACTIVE
-    );
+      && x.subArea.status === Status.ACTIVE
+      && x.subArea.area.status === Status.ACTIVE
+      );
+    console.log('getAddress', {address}, {user})
     res.json(new Response(200, "", address));
   } catch (err) {
     return next(err);
