@@ -9,7 +9,7 @@ var transporter = nodemailer.createTransport({
 });
 
 var mailOptions = {
-  from: 'Tiffy <tiffy.learn@gmail.com>',
+  from: 'Tapauswa <tiffy.learn@gmail.com>',
 };
 
 exports.setMailOptions = (to, subject, html) => {
@@ -20,7 +20,6 @@ exports.setMailOptions = (to, subject, html) => {
 };
 
 exports.sendMail = () => {
-    console.log('sendMail');
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
@@ -39,17 +38,20 @@ exports.sendOTPMail = (firstName, lastName, otp) => {
   </head>
   
   <body style="text-align: center; margin-top: 20px; font-family: Arial, Helvetica, sans-serif;">
-    <h1 class="purple fw-bold" style="background-color:  rgb(245, 135, 0); color: white;padding: 10px 0px; margin-bottom: 20px;">
-      ${process.env.APP_NAME}</h1>
-    <h2>Welcome!</h2>
-  
+    <img
+      src="https://res.cloudinary.com/duaqsz3ec/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1691229514/assets/Tapauswa_new_png_iorf3m.jpg?_s=public-apps"
+      width="200"
+      alt="Logo">
+    <hr>
+    <h2>Welcome</h2>
+
     <p style="font-size: 16px; margin-top: 20px;">Hello @ ${firstName} ${lastName}</p>
     <p style="font-size: 16px; color: gray;">You have successfully created a ${process.env.APP_NAME} account.</p>
-    <p style="font-size: 16px;">Use <b>${otp}</b> as your OTP to signup. Never share your OTP with any unauthorized person. OTP is confidential and valid for 5 mins.</p>
-  
+    <p style="font-size: 16px;">Use <b>${otp}</b> as your OTP to signup. Never share your OTP with any unauthorized
+      person. OTP is confidential and valid for 5 mins.</p>
+
     <p style="font-size: 16px; color: gray; margin-bottom: 7px; margin-top: 25px;">Thanks!!</p>
-    <p style="font-size: 16px; color: gray; margin: 0;">The ${process.env.APP_NAME} Team</p>
-  
+
   </body>
   </html>`;
 
