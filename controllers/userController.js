@@ -1,4 +1,5 @@
 const Status = require("../data/Status");
+const MongoQuery = require("../data/MongoQuery");
 const MenuuDay = require("../data/MenuDay");
 const User = require("../models/User");
 const Menu = require("../models/Menu");
@@ -10,6 +11,7 @@ const Address = require("../models/Address");
 const Feedback = require("../models/Feedback");
 const Response = require("../models/Response");
 const crypto = require("../utils/crypto");
+const mail = require('../utils/mail');
 
 const userService = require("../services/user");
 
@@ -163,6 +165,9 @@ exports.checkout = async (req, res, next) => {
     order.orderDate = new Date();
     order.user = userId;
     order = await new Order(order).save();
+    order = await Order.findById(order._id).populate(MongoQuery.POPULATE_ORDER_2);
+    mail.setMailOptions(order.user.email, 'Your Order With Tapauswa', mail.sendOrderMail(order));
+    mail.sendMail();
     res.json(new Response(201, "", order));
   } catch (err) {
     return next(err);
