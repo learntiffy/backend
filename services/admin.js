@@ -1,4 +1,5 @@
 const Status = require("../data/Status");
+const MongoQuery = require("../data/MongoQuery");
 const User = require("../models/User");
 const Area = require("../models/Area");
 const SubArea = require("../models/SubArea");
@@ -150,32 +151,8 @@ exports.getOrder = async (req, res, next) => {
 
     } else if (date) {
       const year = date.getFullYear(), month = date.getMonth(), day = date.getDate();
-      order = await Order.find({ mealDate: { $gte: new Date(year, month, day), $lt: new Date(year, month, day + 1) } }).populate([
-        {
-          path: "user",
-          select: { firstName: 1, lastName: 1, mobile: 1 }
-        },
-        {
-          path: "address",
-          populate: [
-            {
-              path: "area",
-              select: { name: 1, pincode: 1 }
-            },
-            {
-              path: "subArea",
-              select: { name: 1 }
-            },
-          ]
-        },
-        {
-          path: "items",
-          select: { name: 1 }
-        },
-        {
-          path: "feedback"
-        }
-      ]);
+      order = await Order.find({ mealDate: { $gte: new Date(year, month, day), $lt: new Date(year, month, day + 1) } })
+        .populate(MongoQuery.POPULATE_ORDER_1);
     }
     res.json(new Response(200, "", order));
   } catch (err) {
