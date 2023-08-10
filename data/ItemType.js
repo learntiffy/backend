@@ -4,6 +4,7 @@ const ItemType = Object.freeze({
   DAL: "DAL",
   RICE: "RICE",
   SPECIAL: "SPECIAL",
+  EXTRA: "EXTRA",
 });
 
 module.exports = ItemType;
