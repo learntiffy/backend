@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const moment = require('moment');
 const Meal = require("../data/Meal");
+const ItemType = require("../data/ItemType");
 
 var transporter = nodemailer.createTransport({
   service: "gmail",
@@ -61,6 +62,11 @@ exports.sendOTPMail = (firstName, lastName, otp) => {
 
 
 exports.sendOrderMail = (order) => {
+  order.items = order.items.map(item => {
+    if (![ItemType.SPECIAL, ItemType.EXTRA].includes(ItemType[item.type]))
+      item.price = "";
+    return item;
+  });
   const items = order.items.reduce((items, item) => items += `<tr>
                                                                 <td>${item.name}</td>
                                                                 <td class="text-center">${item.unit}</td>
