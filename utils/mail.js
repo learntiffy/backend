@@ -62,9 +62,9 @@ exports.sendOTPMail = (firstName, lastName, otp) => {
 
 
 exports.sendOrderMail = (order) => {
-  order.items = order.items.map(item => {
+  order.items = order.items.sort((a, b) => a.type.localeCompare(b.type)).map(item => {
     if (![ItemType.SPECIAL, ItemType.EXTRA].includes(ItemType[item.type]))
-      item.price = "";
+      item.price = "--";
     return item;
   });
   const items = order.items.reduce((items, item) => items += `<tr>
