@@ -45,7 +45,7 @@ exports.saveItem = async (req, res, next) => {
       : await new Item(item).save();
 
     if (isUpdateImage) {
-      await cloudinary.upload(item._id, req.file, async (error, result) => {
+      await cloudinary.uploadImg(item._id, req.file, async (error, result) => {
         if (error) {
           console.log(`Error in cloudinary: ${error}`);
           return;

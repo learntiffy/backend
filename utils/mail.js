@@ -62,16 +62,28 @@ exports.sendOTPMail = (firstName, lastName, otp) => {
 
 
 exports.sendOrderMail = (order) => {
-  order.items = order.items.sort((a, b) => a.type.localeCompare(b.type)).map(item => {
-    if (![ItemType.SPECIAL, ItemType.EXTRA].includes(ItemType[item.type]))
-      item.price = "--";
-    return item;
-  });
-  const items = order.items.reduce((items, item) => items += `<tr>
+  const mealItems = [
+    ...order.items.filter(item => ItemType.SABJI === ItemType[item.type]),
+    ...order.items.filter(item => ItemType.ROTI === ItemType[item.type]),
+    ...order.items.filter(item => ItemType.DAL === ItemType[item.type]),
+    ...order.items.filter(item => ItemType.RICE === ItemType[item.type])
+  ];
+  const mealTotal = mealItems.reduce((total, curr) => { total += curr.price; return total; }, 0);
+  const extraSpecialItems = [
+    ...order.items.filter(item => ItemType.SPECIAL === ItemType[item.type]),
+    ...order.items.filter(item => ItemType.EXTRA === ItemType[item.type])
+  ];
+  const mealItemsHtml = mealItems.reduce((items, item) => items += `<tr>
                                                                 <td>${item.name}</td>
                                                                 <td class="text-center">${item.unit}</td>
-                                                                <td class="text-center">&#8377; ${item.price}</td>
+                                                                <td class="text-center">--</td>
                                                               </tr>`, '');
+  const extraSpecialItemsHtml = extraSpecialItems.reduce((items, item) => items += `<tr>
+                                                              <td>${item.name}</td>
+                                                              <td class="text-center">${item.unit}</td>
+                                                              <td class="text-center">&#8377; ${item.price}</td>
+                                                            </tr>`, '');                                                              
+
   const address = order.address;
 
   const mail = `
@@ -119,7 +131,13 @@ exports.sendOrderMail = (order) => {
                   </tr>
               </thead>
               <tbody>
-                  ${items}
+                  ${mealItemsHtml}
+                  <tr>
+                      <td><b>SubTotal</b></td>
+                      <td></td>
+                      <td class="text-center"><b>&#8377; ${mealTotal}</b></td>
+                  </tr>
+                  ${extraSpecialItemsHtml}
                   <tr>
                       <td><b>Total</b></td>
                       <td></td>

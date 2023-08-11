@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 
-exports.upload = async (imageId, image, callback) => {
+exports.uploadImg = async (imageId, image, callback) => {
   await cloudinary.uploader
     .upload_stream(
       {
@@ -14,6 +14,22 @@ exports.upload = async (imageId, image, callback) => {
       callback
     )
     .end(image.buffer);
+};
+
+exports.uploadVdo = async (vdoId, vdo, callback) => {
+  await cloudinary.uploader
+    .upload_stream(
+      {
+        resource_type: "image",
+        folder: "tiffy/forum",
+        public_id: vdoId,
+        width: 508,
+        height: 320,
+        crop: "scale",
+      },
+      callback
+    )
+    .end(vdo.buffer);
 };
 
 exports.delete = async (imageId) => {
