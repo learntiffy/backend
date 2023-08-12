@@ -16,20 +16,17 @@ exports.uploadImg = async (imageId, image, callback) => {
     .end(image.buffer);
 };
 
-exports.uploadVdo = async (vdoId, vdo, callback) => {
+exports.upload = async (id, video, callback) => {
   await cloudinary.uploader
     .upload_stream(
       {
-        resource_type: "image",
+        resource_type: "auto",
         folder: "tiffy/forum",
-        public_id: vdoId,
-        width: 508,
-        height: 320,
-        crop: "scale",
+        public_id: id,
       },
       callback
     )
-    .end(vdo.buffer);
+    .end(video.buffer);
 };
 
 exports.delete = async (imageId) => {

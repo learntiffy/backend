@@ -33,4 +33,8 @@ router.get("/getOrders", isUser, userController.getOrders);
 
 router.post("/feedback", isUser, userController.feedback);
 
+router.post("/forum/posts/add", isUser, userController.addPost);
+
+router.get("/forum/posts", isUser, userController.getPosts);
+
 module.exports = router;

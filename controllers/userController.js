@@ -125,9 +125,9 @@ exports.getAddress = async (req, res, next) => {
     });
     const address = user.address.filter(
       (x) => x.status === Status.ACTIVE
-      && x.subArea.status === Status.ACTIVE
-      && x.subArea.area.status === Status.ACTIVE
-      );
+        && x.subArea.status === Status.ACTIVE
+        && x.subArea.area.status === Status.ACTIVE
+    );
     res.json(new Response(200, "", address));
   } catch (err) {
     return next(err);
@@ -185,6 +185,39 @@ exports.feedback = async (req, res, next) => {
     return next(err);
   }
 }
+
+exports.addPost = async (req, res, next) => {
+  try {
+    const userId = req.id;
+    let forum = JSON.parse(req.body.forum);
+    forum.user = userId;
+    forum.postDate = new Date();
+    forum = await new Forum(forum).save();
+
+    await cloudinary.upload(forum._id, req.file, async (error, result) => {
+      if (error) {
+        console.log(`Error in cloudinary: ${error}`);
+        return;
+      }
+      forum.url = result.secure_url;
+      await forum.save();
+      res.json(new Response(200, "Post saved", forum));
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.getPosts = async (req, res, next) => {
+  try {
+    const posts = await Forum.find()
+      .populate('user')
+      .sort({ postDate: -1 });
+    res.json(new Response(200, "", posts));
+  } catch (err) {
+    return next(err);
+  }
+};
 
 exports.getOrders = async (req, res, next) => {
   try {
