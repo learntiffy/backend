@@ -35,13 +35,13 @@ exports.getMenuDay = async (req, res, next) => {
       let dayMenu =
         menuDay === MenuuDay.ALL
           ? await MenuDay.find().populate({
-              path: "menu",
-              populate: { path: "items" },
-            })
+            path: "menu",
+            populate: { path: "items" },
+          })
           : await MenuDay.find({ day: menuDay }).populate({
-              path: "menu",
-              populate: { path: "items" },
-            });
+            path: "menu",
+            populate: { path: "items" },
+          });
 
       dayMenu.forEach((x) => {
         x.menu.items = x.menu.items.filter((x) => x.status === Status.ACTIVE);
@@ -212,16 +212,21 @@ exports.addPost = async (req, res, next) => {
     forum.postDate = new Date();
     forum = await new Forum(forum).save();
 
-    await cloudinary.upload(forum._id, req.file, async (error, result) => {
-      if (error) {
-        console.log(`Error in cloudinary: ${error}`);
-        return;
-      }
-      forum.url = result.secure_url;
-      await forum.save();
+    if (req.file) {
+      await cloudinary.upload(forum._id, req.file, async (error, result) => {
+        if (error) {
+          console.log(`Error in cloudinary: ${error}`);
+          return;
+        }
+        forum.url = result.secure_url;
+        await forum.save();
+        logger.info(`Forum post added by user ${userId}`);
+        res.json(new Response(200, "Post saved", forum));
+      });
+    } else {
       logger.info(`Forum post added by user ${userId}`);
       res.json(new Response(200, "Post saved", forum));
-    });
+    }
   } catch (err) {
     return next(err);
   }
