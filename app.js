@@ -14,7 +14,7 @@ const userRoute = require("./routes/user");
 const adminRoute = require("./routes/admin");
 
 const app = express();
-app.use(bodyParser.json({ limit: '3mb' }));
+app.use(bodyParser.json({ limit: '20mb' }));
 app.use(multer().single("file"));
 app.use(cors());
 
