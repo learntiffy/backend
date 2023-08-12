@@ -1,4 +1,4 @@
-const Status = require("../data/Status");
+const logger = require("../utils/logger");
 const MongoQuery = require("../data/MongoQuery");
 const User = require("../models/User");
 const Area = require("../models/Area");
@@ -84,6 +84,7 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getArea = async (req, res, next) => {
   try {
+    logger.info("Areas fetched");
     res.json(new Response(200, "", await Area.find()));
   } catch (err) {
     return next(err);
