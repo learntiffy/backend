@@ -5,7 +5,7 @@ const UserType = require("../data/UserType");
 const jwt = require("../utils/jwt");
 const otp = require('../utils/otp');
 const mail = require('../utils/mail');
-const logger = require("./utils/logger");
+const logger = require("../utils/logger");
 
 exports.userLogin = async (req, res, next) => {
   try {
