@@ -9,11 +9,13 @@ const Area = require("../models/Area");
 const SubArea = require("../models/SubArea");
 const Address = require("../models/Address");
 const Feedback = require("../models/Feedback");
+const Forum = require("../models/Forum");
 const Response = require("../models/Response");
 const crypto = require("../utils/crypto");
-const mail = require('../utils/mail');
+const mail = require("../utils/mail");
 
 const userService = require("../services/user");
+const cloudinary = require("../utils/cloudinary");
 
 exports.getUser = async (req, res, next) => {
   try {
@@ -33,16 +35,16 @@ exports.getMenuDay = async (req, res, next) => {
       let dayMenu =
         menuDay === MenuuDay.ALL
           ? await MenuDay.find().populate({
-            path: "menu",
-            populate: { path: "items" },
-          })
+              path: "menu",
+              populate: { path: "items" },
+            })
           : await MenuDay.find({ day: menuDay }).populate({
-            path: "menu",
-            populate: { path: "items" },
-          });
+              path: "menu",
+              populate: { path: "items" },
+            });
 
-      dayMenu.forEach(x => {
-        x.menu.items = x.menu.items.filter(x => x.status === Status.ACTIVE)
+      dayMenu.forEach((x) => {
+        x.menu.items = x.menu.items.filter((x) => x.status === Status.ACTIVE);
       });
       logger.info("Menus fetched");
       res.json(new Response(200, "", dayMenu));
@@ -130,9 +132,10 @@ exports.getAddress = async (req, res, next) => {
       },
     });
     const address = user.address.filter(
-      (x) => x.status === Status.ACTIVE
-        && x.subArea.status === Status.ACTIVE
-        && x.subArea.area.status === Status.ACTIVE
+      (x) =>
+        x.status === Status.ACTIVE &&
+        x.subArea.status === Status.ACTIVE &&
+        x.subArea.area.status === Status.ACTIVE
     );
     logger.info(`Address fetched for ${userId}`);
     res.json(new Response(200, "", address));
@@ -172,8 +175,14 @@ exports.checkout = async (req, res, next) => {
     order.orderDate = new Date();
     order.user = userId;
     order = await new Order(order).save();
-    order = await Order.findById(order._id).populate(MongoQuery.POPULATE_ORDER_2);
-    mail.setMailOptions(order.user.email, 'Your Order With Tapauswa', mail.sendOrderMail(order));
+    order = await Order.findById(order._id).populate(
+      MongoQuery.POPULATE_ORDER_2
+    );
+    mail.setMailOptions(
+      order.user.email,
+      "Your Order With Tapauswa",
+      mail.sendOrderMail(order)
+    );
     mail.sendMail();
     logger.info(`Order saved - ${order._id}`);
     res.json(new Response(201, "", order));
@@ -193,7 +202,7 @@ exports.feedback = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-}
+};
 
 exports.addPost = async (req, res, next) => {
   try {
@@ -220,9 +229,7 @@ exports.addPost = async (req, res, next) => {
 
 exports.getPosts = async (req, res, next) => {
   try {
-    const posts = await Forum.find()
-      .populate('user')
-      .sort({ postDate: -1 });
+    const posts = await Forum.find().populate("user").sort({ postDate: -1 });
     logger.info("Forum posts fetched");
     res.json(new Response(200, "", posts));
   } catch (err) {
@@ -235,12 +242,12 @@ exports.getOrders = async (req, res, next) => {
     const userId = req.id;
     let orders = await Order.find({
       user: userId,
-      status: { $in: [Status.ORDERED, Status.DELIVERED] }
+      status: { $in: [Status.ORDERED, Status.DELIVERED] },
     })
       .populate([
-        { path: 'address', populate: [{ path: 'area' }, { path: 'subArea' }] },
-        { path: 'items' },
-        { path: 'feedback' }
+        { path: "address", populate: [{ path: "area" }, { path: "subArea" }] },
+        { path: "items" },
+        { path: "feedback" },
       ])
       .sort({ mealDate: -1 });
     logger.info(`Orders fetched for user ${userId}`);
