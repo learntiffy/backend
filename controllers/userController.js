@@ -1,8 +1,8 @@
+const logger = require("../utils/logger");
 const Status = require("../data/Status");
 const MongoQuery = require("../data/MongoQuery");
 const MenuuDay = require("../data/MenuDay");
 const User = require("../models/User");
-const Menu = require("../models/Menu");
 const MenuDay = require("../models/MenuDay");
 const Order = require("../models/Order");
 const Area = require("../models/Area");
@@ -19,6 +19,7 @@ exports.getUser = async (req, res, next) => {
   try {
     const userId = req.id;
     const user = await User.findById(userId);
+    logger.info(`User fetched - ${userId}`);
     res.json(new Response(200, "", user));
   } catch (err) {
     return next(err);
@@ -43,6 +44,7 @@ exports.getMenuDay = async (req, res, next) => {
       dayMenu.forEach(x => {
         x.menu.items = x.menu.items.filter(x => x.status === Status.ACTIVE)
       });
+      logger.info("Menus fetched");
       res.json(new Response(200, "", dayMenu));
     } else {
       throw Error("");
@@ -54,6 +56,7 @@ exports.getMenuDay = async (req, res, next) => {
 
 exports.getArea = async (req, res, next) => {
   try {
+    logger.info("Areas fetched");
     res.json(new Response(200, "", await Area.find({ status: Status.ACTIVE })));
   } catch (err) {
     return next(err);
@@ -63,6 +66,7 @@ exports.getArea = async (req, res, next) => {
 exports.getSubArea = async (req, res, next) => {
   try {
     const areaId = req.query.areaId;
+    logger.info(`SubAreas fetched for (area : ${areaId})`);
     res.json(
       new Response(
         200,
@@ -85,6 +89,7 @@ exports.saveAddress = async (req, res, next) => {
       address = await new Address(address).save();
       await User.findByIdAndUpdate(userId, { $push: { address: address._id } });
     }
+    logger.info(`Address saved - ${address._id}`);
     res.json(new Response(200, "Address saved", address));
   } catch (err) {
     return next(err);
@@ -105,6 +110,7 @@ exports.deleteAddress = async (req, res, next) => {
   try {
     const addressId = req.params.addressId;
     await Address.findByIdAndUpdate(addressId, { status: Status.DELETED });
+    logger.info(`Address deleted - ${addressId}`);
     res.json(new Response(200, "Address deleted!!"));
   } catch (err) {
     return next(err);
@@ -128,6 +134,7 @@ exports.getAddress = async (req, res, next) => {
         && x.subArea.status === Status.ACTIVE
         && x.subArea.area.status === Status.ACTIVE
     );
+    logger.info(`Address fetched for ${userId}`);
     res.json(new Response(200, "", address));
   } catch (err) {
     return next(err);
@@ -168,6 +175,7 @@ exports.checkout = async (req, res, next) => {
     order = await Order.findById(order._id).populate(MongoQuery.POPULATE_ORDER_2);
     mail.setMailOptions(order.user.email, 'Your Order With Tapauswa', mail.sendOrderMail(order));
     mail.sendMail();
+    logger.info(`Order saved - ${order._id}`);
     res.json(new Response(201, "", order));
   } catch (err) {
     return next(err);
@@ -180,6 +188,7 @@ exports.feedback = async (req, res, next) => {
     const orderId = feedback.orderId;
     feedback = await new Feedback(feedback).save();
     const order = await Order.findByIdAndUpdate(orderId, { feedback: feedback });
+    logger.info(`Feedback saved - ${feedback._id}`);
     res.json(new Response(200, "", order));
   } catch (err) {
     return next(err);
@@ -201,6 +210,7 @@ exports.addPost = async (req, res, next) => {
       }
       forum.url = result.secure_url;
       await forum.save();
+      logger.info(`Forum post added by user ${userId}`);
       res.json(new Response(200, "Post saved", forum));
     });
   } catch (err) {
@@ -213,6 +223,7 @@ exports.getPosts = async (req, res, next) => {
     const posts = await Forum.find()
       .populate('user')
       .sort({ postDate: -1 });
+    logger.info("Forum posts fetched");
     res.json(new Response(200, "", posts));
   } catch (err) {
     return next(err);
@@ -232,6 +243,7 @@ exports.getOrders = async (req, res, next) => {
         { path: 'feedback' }
       ])
       .sort({ mealDate: -1 });
+    logger.info(`Orders fetched for user ${userId}`);
     res.json(new Response(200, "", orders));
   } catch (err) {
     return next(err);

@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const moment = require('moment');
 const Meal = require("../data/Meal");
 const ItemType = require("../data/ItemType");
+const logger = require("./logger");
 
 var transporter = nodemailer.createTransport({
   service: "gmail",
@@ -26,7 +27,7 @@ exports.sendMail = () => {
     if (error) {
       console.log(error);
     } else {
-      console.log("Email sent");
+      logger.info("Email sent");
     }
   });
 };

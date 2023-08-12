@@ -13,7 +13,8 @@ exports.userLogin = async (req, res, next) => {
     if (user) {
       if ([Status.REGISTERED, Status.ACTIVE].includes(user.status)) {
         await this.sendToken(user);
-        res.json(new Response(200, "OTP sent succefully"));
+        logger.info(`OTP sent successfully to ${email}`);
+        res.json(new Response(200, "OTP sent successfully"));
       } else {
         res.json(new Response(401, "User isn't verified"));
       }
@@ -37,6 +38,7 @@ exports.adminLogin = async (req, res, next) => {
         { userName: userName, type: UserType.ADMIN },
         "180d"
       );
+      logger.info(`Admin logged in successfully`);
       res.json(new Response(200, "Login successfully", jwtToken));
     } else {
       res.json(new Response(400, "Invalid credentials"));

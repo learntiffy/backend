@@ -1,3 +1,4 @@
+const logger = require("../utils/logger");
 const Order = require("../models/Order");
 const MenuDay = require("../models/MenuDay");
 const Response = require("../models/Response");
@@ -61,6 +62,7 @@ exports.get = async (req, res, next) => {
 exports.setMenu = async (req, res, next) => {
   const menuDay = req.body.menuDay;
   await MenuDay.findByIdAndUpdate(menuDay._id, menuDay);
+  logger.info(`MenuDay updated - ${menuDay._id}`);
   res.json(new Response(201, "MenuDay updated!!"));
 };
 
@@ -68,6 +70,7 @@ exports.changeOrderStatus = async (req, res, next) => {
   const order = req.body.order;
   if (Status[order.status]) {
     await Order.findByIdAndUpdate(order._id, { status: order.status });
+    logger.info(`Order status updated (OrderId - ${order._id}, Status - ${order.status})`);
     res.json(new Response(201, "Order status changed!!"));
   } else
     res.json(new Response(401, "Invalid order status!!"));
