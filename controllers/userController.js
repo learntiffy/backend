@@ -2,18 +2,19 @@ const Status = require("../data/Status");
 const MongoQuery = require("../data/MongoQuery");
 const MenuuDay = require("../data/MenuDay");
 const User = require("../models/User");
-const Menu = require("../models/Menu");
 const MenuDay = require("../models/MenuDay");
 const Order = require("../models/Order");
 const Area = require("../models/Area");
 const SubArea = require("../models/SubArea");
 const Address = require("../models/Address");
 const Feedback = require("../models/Feedback");
+const Forum = require("../models/Forum");
 const Response = require("../models/Response");
 const crypto = require("../utils/crypto");
-const mail = require('../utils/mail');
+const mail = require("../utils/mail");
 
 const userService = require("../services/user");
+const cloudinary = require("../utils/cloudinary");
 
 exports.getUser = async (req, res, next) => {
   try {
@@ -32,16 +33,16 @@ exports.getMenuDay = async (req, res, next) => {
       let dayMenu =
         menuDay === MenuuDay.ALL
           ? await MenuDay.find().populate({
-            path: "menu",
-            populate: { path: "items" },
-          })
+              path: "menu",
+              populate: { path: "items" },
+            })
           : await MenuDay.find({ day: menuDay }).populate({
-            path: "menu",
-            populate: { path: "items" },
-          });
+              path: "menu",
+              populate: { path: "items" },
+            });
 
-      dayMenu.forEach(x => {
-        x.menu.items = x.menu.items.filter(x => x.status === Status.ACTIVE)
+      dayMenu.forEach((x) => {
+        x.menu.items = x.menu.items.filter((x) => x.status === Status.ACTIVE);
       });
       res.json(new Response(200, "", dayMenu));
     } else {
@@ -124,9 +125,10 @@ exports.getAddress = async (req, res, next) => {
       },
     });
     const address = user.address.filter(
-      (x) => x.status === Status.ACTIVE
-        && x.subArea.status === Status.ACTIVE
-        && x.subArea.area.status === Status.ACTIVE
+      (x) =>
+        x.status === Status.ACTIVE &&
+        x.subArea.status === Status.ACTIVE &&
+        x.subArea.area.status === Status.ACTIVE
     );
     res.json(new Response(200, "", address));
   } catch (err) {
@@ -165,8 +167,14 @@ exports.checkout = async (req, res, next) => {
     order.orderDate = new Date();
     order.user = userId;
     order = await new Order(order).save();
-    order = await Order.findById(order._id).populate(MongoQuery.POPULATE_ORDER_2);
-    mail.setMailOptions(order.user.email, 'Your Order With Tapauswa', mail.sendOrderMail(order));
+    order = await Order.findById(order._id).populate(
+      MongoQuery.POPULATE_ORDER_2
+    );
+    mail.setMailOptions(
+      order.user.email,
+      "Your Order With Tapauswa",
+      mail.sendOrderMail(order)
+    );
     mail.sendMail();
     res.json(new Response(201, "", order));
   } catch (err) {
@@ -179,12 +187,14 @@ exports.feedback = async (req, res, next) => {
     let feedback = req.body.feedback;
     const orderId = feedback.orderId;
     feedback = await new Feedback(feedback).save();
-    const order = await Order.findByIdAndUpdate(orderId, { feedback: feedback });
+    const order = await Order.findByIdAndUpdate(orderId, {
+      feedback: feedback,
+    });
     res.json(new Response(200, "", order));
   } catch (err) {
     return next(err);
   }
-}
+};
 
 exports.addPost = async (req, res, next) => {
   try {
@@ -210,9 +220,7 @@ exports.addPost = async (req, res, next) => {
 
 exports.getPosts = async (req, res, next) => {
   try {
-    const posts = await Forum.find()
-      .populate('user')
-      .sort({ postDate: -1 });
+    const posts = await Forum.find().populate("user").sort({ postDate: -1 });
     res.json(new Response(200, "", posts));
   } catch (err) {
     return next(err);
@@ -224,12 +232,12 @@ exports.getOrders = async (req, res, next) => {
     const userId = req.id;
     let orders = await Order.find({
       user: userId,
-      status: { $in: [Status.ORDERED, Status.DELIVERED] }
+      status: { $in: [Status.ORDERED, Status.DELIVERED] },
     })
       .populate([
-        { path: 'address', populate: [{ path: 'area' }, { path: 'subArea' }] },
-        { path: 'items' },
-        { path: 'feedback' }
+        { path: "address", populate: [{ path: "area" }, { path: "subArea" }] },
+        { path: "items" },
+        { path: "feedback" },
       ])
       .sort({ mealDate: -1 });
     res.json(new Response(200, "", orders));
