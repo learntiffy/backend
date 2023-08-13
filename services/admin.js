@@ -17,6 +17,7 @@ exports.saveArea = async (req, res, next) => {
     area = area._id
       ? await Area.findByIdAndUpdate(area._id, area)
       : await new Area(req.body.area).save();
+    logger.info(`Area saved - ${area._id}`);
     res.json(new Response(200, "Area saved", area));
   } catch (err) {
     return next(err);
@@ -29,6 +30,7 @@ exports.saveSubArea = async (req, res, next) => {
     subArea = subArea._id
       ? await SubArea.findByIdAndUpdate(subArea._id, subArea)
       : await new SubArea(req.body.subArea).save();
+    logger.info(`SubArea saved - ${subArea._id}`);
     res.json(new Response(200, "SubArea saved", subArea));
   } catch (err) {
     return next(err);
@@ -52,9 +54,11 @@ exports.saveItem = async (req, res, next) => {
         }
         item.imageURL = result.secure_url;
         await item.save();
+        logger.info(`Item saved - ${item._id}`);
         res.json(new Response(200, "Item saved", item));
       });
     } else {
+      logger.info(`Item saved - ${item._id}`);
       res.json(new Response(200, "Item saved", item));
     }
   } catch (err) {
@@ -68,6 +72,7 @@ exports.saveMenu = async (req, res, next) => {
     menu = menu._id
       ? await Menu.findByIdAndUpdate(menu._id, menu)
       : await new Menu(req.body.menu).save();
+    logger.info(`Menu saved - ${menu._id}`);
     res.json(new Response(200, "Menu saved", menu));
   } catch (err) {
     return next(err);
@@ -76,6 +81,7 @@ exports.saveMenu = async (req, res, next) => {
 
 exports.getUsers = async (req, res, next) => {
   try {
+    logger.info("Users fetched");
     res.json(new Response(200, "", await User.find({}, { token: 0, _v: 0 })));
   } catch (err) {
     return next(err);
@@ -94,6 +100,7 @@ exports.getArea = async (req, res, next) => {
 exports.getSubArea = async (req, res, next) => {
   try {
     const areaId = req.query.areaId;
+    logger.info(`SubAreas fetched for (area : ${areaId})`);
     res.json(new Response(200, "", await SubArea.find({ area: areaId })));
   } catch (err) {
     return next(err);
@@ -102,6 +109,7 @@ exports.getSubArea = async (req, res, next) => {
 
 exports.getItem = async (req, res, next) => {
   try {
+    logger.info("Items fetched");
     res.json(new Response(200, "", await Item.find()));
   } catch (err) {
     return next(err);
@@ -116,6 +124,7 @@ exports.getMenu = async (req, res, next) => {
         path: "items",
       })
       : await Menu.find();
+    logger.info("Menu fetched");
     res.json(new Response(200, "", menu));
   } catch (err) {
     return next(err);
@@ -135,6 +144,7 @@ exports.getMenuDay = async (req, res, next) => {
         dinner: menuDay.find(x => x.day.includes('TOMO_DINNER'))
       },
     }
+    logger.info("MenuDay fetched");
     res.json(
       new Response(200, "", menuByDay)
     );
@@ -155,6 +165,7 @@ exports.getOrder = async (req, res, next) => {
       order = await Order.find({ mealDate: { $gte: new Date(year, month, day), $lt: new Date(year, month, day + 1) } })
         .populate(MongoQuery.POPULATE_ORDER_1);
     }
+    logger.info(`Orders fetched for ${date}`);
     res.json(new Response(200, "", order));
   } catch (err) {
     return next(err);

@@ -1,3 +1,5 @@
+const logger = require("./logger");
+
 const cloudinary = require("cloudinary").v2;
 
 exports.uploadImg = async (imageId, image, callback) => {
@@ -31,5 +33,5 @@ exports.upload = async (id, video, callback) => {
 
 exports.delete = async (imageId) => {
   cloudinary.uploader.destroy(imageId)
-    .then(() => { console.log(`Image deleted [Id : ${imageId}]`); });
+    .then(() => { logger.info(`Cloudinary image deleted [Id : ${imageId}]`); });
 }

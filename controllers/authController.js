@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Response = require("../models/Response");
 const UserType = require("../data/UserType");
 const jwt = require('../utils/jwt');
+const logger = require("../utils/logger");
 const Status = require('../data/Status');
 
 const authService = require("../services/auth");
@@ -10,6 +11,7 @@ exports.registerUser = async (req, res, next) => {
   try {
     let user = req.body.user;
     user = await new User(user).save();
+    logger.info(`User created - ${user._id}`);
     res.json(new Response(201, "User Created"));
   } catch (err) {
     if (err.name === "MongoServerError") {
@@ -46,8 +48,6 @@ exports.verifyOTP = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
     const user = await User.findOne({ email: email });
-    console.log({email, otp});
-    console.log(user);
     if (user && user.status !== Status.INACTIVE) {
       if (otp === jwt.verify(user.token).otp) {
         const jwtToken = jwt.generate(
@@ -56,6 +56,7 @@ exports.verifyOTP = async (req, res, next) => {
         );
         user.status = Status.ACTIVE;
         await user.save();
+        logger.info(`OTP verification successfull for ${email}`);
         res.json(new Response(200, 'OTP verification successfull!!', jwtToken));
       } else {
         res.json(new Response(401, 'Invalid OTP!! Please try again.'));

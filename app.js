@@ -6,6 +6,7 @@ const multer = require("multer");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
 
+const logger = require("./utils/logger");
 const spinup = require("./utils/spinup");
 const setmenu = require("./utils/setmenu");
 const authRoute = require("./routes/auth");
@@ -13,7 +14,7 @@ const userRoute = require("./routes/user");
 const adminRoute = require("./routes/admin");
 
 const app = express();
-app.use(bodyParser.json({ limit: '3mb' }));
+app.use(bodyParser.json({ limit: '20mb' }));
 app.use(multer().single("file"));
 app.use(cors());
 
@@ -30,7 +31,7 @@ app.use("/user", userRoute);
 app.use("/admin", adminRoute);
 
 app.use((err, req, res, next) => {
-  console.log(err);
+  logger.error(err);
   res.status(500).json("Internal Server Error");
 });
 
@@ -39,7 +40,7 @@ setmenu.start();
 mongoose
   .connect("mongodb+srv://tiffy:tiffy@cluster0.7oso9te.mongodb.net/tiffy")
   .then((result) => {
-    console.log("Connected!!!");
+    logger.info("DB Connected!");
     app.listen(process.env.PORT || 9999);
   })
   .catch((err) => console.log(err));
