@@ -183,6 +183,11 @@ exports.checkout = async (req, res, next) => {
       "Your Order With Tapauswa",
       mail.sendOrderMail(order)
     );
+    mail.setMailOptions(
+      "homionapp@gmail.com",
+      "New Order In Tapauswa",
+      mail.sendOrderMailToAdmin(order)
+    );
     mail.sendMail();
     logger.info(`Order saved - ${order._id}`);
     res.json(new Response(201, "", order));

@@ -161,3 +161,72 @@ exports.sendOrderMail = (order) => {
   return mail;
 };
 
+exports.sendOrderMailToAdmin = (order) => {
+  const items = order.items.reduce((items, item) => items += `<tr>
+                                                              <td>${item.name}</td>
+                                                              <td class="text-center">${item.unit}</td>
+                                                              <td class="text-center">&#8377; ${item.price}</td>
+                                                            </tr>`, '');                                                              
+  const address = order.address;
+  const mail = `
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <style>
+          body {
+              margin-top: 20px;
+              font-family: Arial, Helvetica, sans-serif;
+          }
+          .text-center {
+              text-align: center;
+          }
+          p {
+              font-size: 14px;
+              margin-top: 20px;
+          }
+          th, td {
+              border: 1px solid gray;
+          }
+          table {
+              width: 100%;
+          }
+      </style>
+  </head>
+
+  <body>
+      <div class="text-center">
+          <img src="https://res.cloudinary.com/duaqsz3ec/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1691229514/assets/Tapauswa_new_png_iorf3m.jpg?_s=public-apps"
+              width="200" alt="Logo">
+      </div><hr>
+
+      <p>New ${order.meal.toLowerCase()} order!</p>
+      <p>Order Details <b>#${order._id.toString().toUpperCase()}</b></p>
+      <p>Meal Date: ${moment(order.mealDate).format('MMMM Do YYYY')}</p>
+      <div>
+          <table>
+              <thead>
+                  <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Amount</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  ${items}
+                  <tr>
+                      <td><b>Total</b></td>
+                      <td></td>
+                      <td class="text-center"><b>&#8377; ${order.amount}</b></td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    <p><b>Address: </b> ${address.homeNo}, ${address.society}, ${address.landmark}, ${address.subArea.name}, ${address.area.name} - ${address.area.pincode}</p>
+      <p>Order should be delivered to above address on ${moment(order.mealDate).format('MMMM Do YYYY')} by ${order.meal === Meal.LUNCH ? '01' : '07'} PM.</p>
+      <hr>
+  </body>
+  </html>`;
+  return mail;
+};
+
