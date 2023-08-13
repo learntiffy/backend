@@ -12,20 +12,20 @@ var transporter = nodemailer.createTransport({
   },
 });
 
-var mailOptions = {
-  from: 'Tapauswa <tiffy.learn@gmail.com>',
+exports.sendMail = (to, subject, html) => {
+  const mailOptions = {
+    from: 'Tapauswa <tiffy.learn@gmail.com>',
+    to: to,
+    subject: subject,
+    html: html
+  };
+  this.send(mailOptions);
 };
 
-exports.setMailOptions = (to, subject, html) => {
-  mailOptions.to = to;
-  mailOptions.subject = subject;
-  mailOptions.html = html;
-};
-
-exports.sendMail = () => {
+exports.send = (mailOptions) => {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
+      logger.error(error);
     } else {
       logger.info("Email sent");
     }
@@ -61,7 +61,6 @@ exports.sendOTPMail = (firstName, lastName, otp) => {
   return mail;
 };
 
-
 exports.sendOrderMail = (order) => {
   const mealItems = [
     ...order.items.filter(item => ItemType.SABJI === ItemType[item.type]),
@@ -83,10 +82,8 @@ exports.sendOrderMail = (order) => {
                                                               <td>${item.name}</td>
                                                               <td class="text-center">${item.unit}</td>
                                                               <td class="text-center">&#8377; ${item.price}</td>
-                                                            </tr>`, '');                                                              
-
+                                                            </tr>`, '');
   const address = order.address;
-
   const mail = `
   <html>
   <head>
@@ -166,7 +163,7 @@ exports.sendOrderMailToAdmin = (order) => {
                                                               <td>${item.name}</td>
                                                               <td class="text-center">${item.unit}</td>
                                                               <td class="text-center">&#8377; ${item.price}</td>
-                                                            </tr>`, '');                                                              
+                                                            </tr>`, '');
   const address = order.address;
   const mail = `
   <html>

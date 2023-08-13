@@ -178,17 +178,16 @@ exports.checkout = async (req, res, next) => {
     order = await Order.findById(order._id).populate(
       MongoQuery.POPULATE_ORDER_2
     );
-    mail.setMailOptions(
+    mail.sendMail(
       order.user.email,
       "Your Order With Tapauswa",
       mail.sendOrderMail(order)
     );
-    mail.setMailOptions(
+    mail.sendMail(
       "homionapp@gmail.com",
       "New Order In Tapauswa",
       mail.sendOrderMailToAdmin(order)
     );
-    mail.sendMail();
     logger.info(`Order saved - ${order._id}`);
     res.json(new Response(201, "", order));
   } catch (err) {

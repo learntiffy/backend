@@ -53,6 +53,5 @@ exports.sendToken = async (user) => {
   const OTP = otp.generateOTP();
   user.token = otp.getOtpToken(OTP);
   await user.save();
-  mail.setMailOptions(user.email, 'Verify OTP', mail.sendOTPMail(user.firstName, user.lastName, OTP));
-  mail.sendMail();
+  mail.sendMail(user.email, 'Verify OTP', mail.sendOTPMail(user.firstName, user.lastName, OTP));
 }
