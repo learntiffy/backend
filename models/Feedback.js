@@ -3,8 +3,7 @@ const Schema = mongoose.Schema;
 
 const feedbackSchema = new Schema({
   comment: {
-    type: String,
-    required: true,
+    type: String
   },
   foodRating: {
     type: Number,
